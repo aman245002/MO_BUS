@@ -29,7 +29,7 @@ const AddBus = () => {
     const fetchBusStops = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://mo-bus-iozk.onrender.com/api/busstops", {
+        const res = await axios.get("http://localhost:5000/api/busstops", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBusStopsList(res.data); // ✅ Set the list
@@ -61,7 +61,7 @@ const AddBus = () => {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.post(
-        "https://mo-bus-iozk.onrender.com/api/buses",
+        "http://localhost:5000/api/buses",
         formData,
         {
           headers: {

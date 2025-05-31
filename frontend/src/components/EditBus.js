@@ -44,10 +44,10 @@ const EditBus = () => {
         const token = localStorage.getItem("token");
 
         const [busRes, stopsRes] = await Promise.all([
-          axios.get(`https://mo-bus-iozk.onrender.com/api/buses/${id}`, {
+          axios.get(`http://localhost:5000/api/buses/${id}`, {
             headers: { Authorization: `Bearer ${token}` }, // ✅ FIXED HERE
           }),
-          axios.get("https://mo-bus-iozk.onrender.com/api/busstops", {
+          axios.get("http://localhost:5000/api/busstops", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -88,15 +88,11 @@ const EditBus = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `https://mo-bus-iozk.onrender.com/api/buses/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`http://localhost:5000/api/buses/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setMessage("Bus updated successfully!");
       setTimeout(() => navigate("/manage-buses"), 1500);

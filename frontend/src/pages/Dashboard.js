@@ -9,9 +9,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBuses = async () => {
       try {
-        const res = await axios.get(
-          "https://mo-bus-iozk.onrender.com/api/buses/all"
-        );
+        const res = await axios.get("http://localhost:5000/api/buses/all");
         setBuses(res.data);
       } catch (error) {
         console.error("Failed to fetch buses", error);

@@ -21,9 +21,7 @@ const ManageBuses = () => {
   const fetchBuses = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "https://mo-bus-iozk.onrender.com/api/buses/all"
-      );
+      const { data } = await axios.get("http://localhost:5000/api/buses/all");
       setBuses(data);
       setLoading(false);
     } catch (err) {
@@ -35,7 +33,7 @@ const ManageBuses = () => {
   const deleteBus = async (id) => {
     if (!window.confirm("Are you sure you want to delete this bus?")) return;
     try {
-      await axios.delete(`https://mo-bus-iozk.onrender.com/api/buses/${id}`, {
+      await axios.delete(`http://localhost:5000/api/buses/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
