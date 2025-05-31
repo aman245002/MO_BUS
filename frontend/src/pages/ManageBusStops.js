@@ -13,11 +13,13 @@ import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 
 function ManageBusStops() {
-  const [editId, setEditId] = useState(null); // track if editing
+  const [editId, setEditId] = useState(null);
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [routeNumbers, setRouteNumbers] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [busStops, setBusStops] = useState([]);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -48,29 +50,34 @@ function ManageBusStops() {
     setError("");
     const routesArray = routeNumbers.split(",").map((r) => r.trim());
 
+    const payload = {
+      name,
+      location,
+      routeNumbers: routesArray,
+      coordinates: {
+        lat: parseFloat(latitude),
+        lng: parseFloat(longitude),
+      },
+    };
+
     try {
       if (editId) {
-        // Edit mode
-        const res = await axios.put(
-          `/api/busstops/${editId}`,
-          { name, location, routeNumbers: routesArray },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.put(`/api/busstops/${editId}`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setMessage(res.data.message);
       } else {
-        // Add mode
-        const res = await axios.post(
-          "/api/busstops",
-          { name, location, routeNumbers: routesArray },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.post("/api/busstops", payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setMessage(res.data.message);
       }
 
-      // Reset form
       setName("");
       setLocation("");
       setRouteNumbers("");
+      setLatitude("");
+      setLongitude("");
       setEditId(null);
       fetchBusStops();
     } catch (err) {
@@ -83,6 +90,8 @@ function ManageBusStops() {
     setName(stop.name);
     setLocation(stop.location);
     setRouteNumbers(stop.routeNumbers.join(", "));
+    setLatitude(stop.coordinates?.lat || "");
+    setLongitude(stop.coordinates?.lng || "");
   };
 
   const handleDelete = async (id) => {
@@ -114,8 +123,8 @@ function ManageBusStops() {
         {error && <Alert variant="danger">{error}</Alert>}
 
         <Form onSubmit={handleAddBusStop} className="mb-4">
-          <Row>
-            <Col md={4}>
+          <Row className="align-items-end">
+            <Col md={3}>
               <Form.Group className="mb-2">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -125,7 +134,7 @@ function ManageBusStops() {
                 />
               </Form.Group>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <Form.Group className="mb-2">
                 <Form.Label>Location</Form.Label>
                 <Form.Control
@@ -135,7 +144,7 @@ function ManageBusStops() {
                 />
               </Form.Group>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <Form.Group className="mb-2">
                 <Form.Label>Route Numbers (comma-separated)</Form.Label>
                 <Form.Control
@@ -145,11 +154,32 @@ function ManageBusStops() {
                 />
               </Form.Group>
             </Col>
+            <Col md={1.5}>
+              <Form.Group className="mb-2">
+                <Form.Label>Lat</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={1.5}>
+              <Form.Group className="mb-2">
+                <Form.Label>Lng</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
           </Row>
           <Button variant="primary" type="submit">
             {editId ? "Update Bus Stop" : "Add Bus Stop"}
           </Button>
-
           {editId && (
             <Button
               variant="secondary"
@@ -159,6 +189,8 @@ function ManageBusStops() {
                 setName("");
                 setLocation("");
                 setRouteNumbers("");
+                setLatitude("");
+                setLongitude("");
               }}
             >
               Cancel Edit
@@ -173,6 +205,8 @@ function ManageBusStops() {
               <th>Name</th>
               <th>Location</th>
               <th>Route Numbers</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -182,6 +216,8 @@ function ManageBusStops() {
                 <td>{stop.name}</td>
                 <td>{stop.location}</td>
                 <td>{stop.routeNumbers.join(", ")}</td>
+                <td>{stop.coordinates?.lat || "N/A"}</td>
+                <td>{stop.coordinates?.lng || "N/A"}</td>
                 <td>
                   <Button
                     variant="warning"

@@ -6,23 +6,26 @@ const router = express.Router();
 
 // Create a new bus stop (Admin only)
 router.post("/", protect, admin, async (req, res) => {
-  const { name, location, routeNumbers } = req.body;
+  const { name, location, routeNumbers, coordinates } = req.body;
 
   if (
     !name ||
     !location ||
     !routeNumbers ||
     !Array.isArray(routeNumbers) ||
-    routeNumbers.length === 0
+    routeNumbers.length === 0 ||
+    !coordinates ||
+    typeof coordinates.lat !== "number" ||
+    typeof coordinates.lng !== "number"
   ) {
     return res.status(400).json({
       message:
-        "All fields (name, location, routeNumbers) are required, and routeNumbers must be a non-empty array",
+        "All fields (name, location, routeNumbers, coordinates.lat, coordinates.lng) are required, and routeNumbers must be a non-empty array",
     });
   }
 
   try {
-    const newBusStop = new BusStop({ name, location, routeNumbers });
+    const newBusStop = new BusStop({ name, location, routeNumbers, coordinates });
     await newBusStop.save();
     res
       .status(201)
@@ -75,25 +78,28 @@ router.delete("/:id", protect, admin, async (req, res) => {
 
 // Update a bus stop by ID (Admin only)
 router.put("/:id", protect, admin, async (req, res) => {
-  const { name, location, routeNumbers } = req.body;
+  const { name, location, routeNumbers, coordinates } = req.body;
 
   if (
     !name ||
     !location ||
     !routeNumbers ||
     !Array.isArray(routeNumbers) ||
-    routeNumbers.length === 0
+    routeNumbers.length === 0 ||
+    !coordinates ||
+    typeof coordinates.lat !== "number" ||
+    typeof coordinates.lng !== "number"
   ) {
     return res.status(400).json({
       message:
-        "All fields (name, location, routeNumbers) are required, and routeNumbers must be a non-empty array",
+        "All fields (name, location, routeNumbers, coordinates.lat, coordinates.lng) are required, and routeNumbers must be a non-empty array",
     });
   }
 
   try {
     const busStop = await BusStop.findByIdAndUpdate(
       req.params.id,
-      { name, location, routeNumbers },
+      { name, location, routeNumbers, coordinates },
       { new: true }
     );
 
@@ -106,6 +112,5 @@ router.put("/:id", protect, admin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;
