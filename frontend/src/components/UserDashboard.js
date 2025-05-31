@@ -26,12 +26,15 @@ function UserDashboard() {
         return;
       }
 
-      const res = await axios.get("http://localhost:5000/api/buses/search", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { stop: busStopName.trim() }, // ✅ Corrected this line
-      });
+      const res = await axios.get(
+        "https://mo-bus-iozk.onrender.com/api/buses/search",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { stop: busStopName.trim() }, // ✅ Corrected this line
+        }
+      );
 
       setResults(res.data);
     } catch (err) {
@@ -83,11 +86,13 @@ function UserDashboard() {
               <div key={bus._id} className="border rounded p-3 mb-3 text-start">
                 <strong>{bus.name}</strong> ({bus.number})<br />
                 <small>
-                  From: {bus.source?.name || "N/A"} → To: {bus.destination?.name || "N/A"}
+                  From: {bus.source?.name || "N/A"} → To:{" "}
+                  {bus.destination?.name || "N/A"}
                   <br />
                   Departure: {bus.departureTime}, Arrival: {bus.arrivalTime}
                   <br />
-                  Seats: {bus.availableSeats}/{bus.totalSeats}, Price: ₹{bus.price}
+                  Seats: {bus.availableSeats}/{bus.totalSeats}, Price: ₹
+                  {bus.price}
                   <br />
                   Route: {bus.routeNumber}, Type: {bus.busType}
                 </small>

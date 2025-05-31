@@ -13,11 +13,14 @@ const ManageProfiles = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:5000/api/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axios.get(
+        "https://mo-bus-iozk.onrender.com/api/users",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setUsers(data);
     } catch (err) {
       setError("Failed to load users");
@@ -29,7 +32,7 @@ const ManageProfiles = () => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/users/${id}`, {
+      await axios.delete(`https://mo-bus-iozk.onrender.com/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
