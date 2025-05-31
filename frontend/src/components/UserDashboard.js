@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { Container, Form, Button, Row, Col, Card, Spinner } from "react-bootstrap";
 import UserNavbar from "./UserNavbar";
 import Footer from "./Footer";
 
@@ -8,21 +8,25 @@ function UserDashboard() {
   const [busStopName, setBusStopName] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setError("");
     setResults([]);
+    setLoading(true);
 
     try {
       if (!busStopName.trim()) {
         setError("Please enter a bus stop name.");
+        setLoading(false);
         return;
       }
 
       const token = localStorage.getItem("token");
       if (!token) {
         setError("You must be logged in to search.");
+        setLoading(false);
         return;
       }
 
@@ -32,7 +36,7 @@ function UserDashboard() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          params: { stop: busStopName.trim() }, // ✅ Corrected this line
+          params: { stop: busStopName.trim() },
         }
       );
 
@@ -42,6 +46,8 @@ function UserDashboard() {
       setError(
         err.response?.data?.message || "Failed to fetch buses. Try again."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,56 +55,66 @@ function UserDashboard() {
     <>
       <UserNavbar />
       <Container className="my-5 text-center">
-        <img
-          src="/bus.jpg"
-          alt="Bus Booking Banner"
-          className="img-fluid mb-4"
-          style={{ maxHeight: "350px", borderRadius: "10px" }}
-        />
+        <Card className="mb-4 shadow-sm">
+          <Card.Img
+            variant="top"
+            src="/bus6.jpg"
+            alt="Bus Booking Banner"
+            style={{ maxHeight: "800px", objectFit: "cover" }}
+          />
+          <Card.Body>
+            <Card.Title as="h3">Search Buses by Bus Stop</Card.Title>
+            <Form onSubmit={handleSearch}>
+              <Row className="justify-content-center my-4">
+                <Col xs={10} md={6} lg={4}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Bus Stop Name"
+                    value={busStopName}
+                    onChange={(e) => setBusStopName(e.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Spinner animation="border" size="sm" /> Searching...
+                  </>
+                ) : (
+                  "Search"
+                )}
+              </Button>
+            </Form>
 
-        <h3 className="mb-4">Search Buses by Bus Stop</h3>
-
-        <Form onSubmit={handleSearch}>
-          <Row className="mb-4 justify-content-center">
-            <Col md={4}>
-              <Form.Control
-                type="text"
-                placeholder="Enter Bus Stop Name"
-                value={busStopName}
-                onChange={(e) => setBusStopName(e.target.value)}
-              />
-            </Col>
-          </Row>
-
-          <div className="text-center">
-            <Button variant="primary" type="submit">
-              Search
-            </Button>
-          </div>
-        </Form>
-
-        {error && <p className="text-danger mt-3">{error}</p>}
+            {error && <p className="text-danger mt-3">{error}</p>}
+          </Card.Body>
+        </Card>
 
         {results.length > 0 && (
-          <Container className="mt-4">
-            <h5>Search Results:</h5>
-            {results.map((bus) => (
-              <div key={bus._id} className="border rounded p-3 mb-3 text-start">
-                <strong>{bus.name}</strong> ({bus.number})<br />
-                <small>
-                  From: {bus.source?.name || "N/A"} → To:{" "}
-                  {bus.destination?.name || "N/A"}
-                  <br />
-                  Departure: {bus.departureTime}, Arrival: {bus.arrivalTime}
-                  <br />
-                  Seats: {bus.availableSeats}/{bus.totalSeats}, Price: ₹
-                  {bus.price}
-                  <br />
-                  Route: {bus.routeNumber}, Type: {bus.busType}
-                </small>
-              </div>
-            ))}
-          </Container>
+          <div>
+            <h4 className="mb-4">Available Buses:</h4>
+            <Row className="g-4 justify-content-center">
+              {results.map((bus) => (
+                <Col key={bus._id} xs={12} md={6} lg={4}>
+                  <Card className="h-100 shadow-sm border-0">
+                    <Card.Body>
+                      <Card.Title>{bus.name} ({bus.number})</Card.Title>
+                      <Card.Text>
+                        <strong>From:</strong> {bus.source?.name || "N/A"} <br />
+                        <strong>To:</strong> {bus.destination?.name || "N/A"} <br />
+                        <strong>Departure:</strong> {bus.departureTime} <br />
+                        <strong>Arrival:</strong> {bus.arrivalTime} <br />
+                        <strong>Seats:</strong> {bus.availableSeats}/{bus.totalSeats} <br />
+                        <strong>Price:</strong> ₹{bus.price} <br />
+                        <strong>Route:</strong> {bus.routeNumber} <br />
+                        <strong>Type:</strong> {bus.busType}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
         )}
       </Container>
       <Footer />
