@@ -1,8 +1,7 @@
-// src/pages/HomePage.js
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
-import busImage from "../assets/bus.jpg"; // Ensure the image exists
+import ImageCarousel from "../components/ImageCarousel";
+import "./HomePage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -15,21 +14,21 @@ const HomePage = () => {
   }, [navigate]);
 
   return (
-    <Container className="my-5">
-      <Row className="align-items-center">
-        <Col md={6} className="mb-4 mb-md-0">
-          <img src={busImage} alt="Bus" className="img-fluid rounded shadow" />
-        </Col>
-        <Col md={6}>
-          <h2 className="mb-3">Welcome to Aman Booking System</h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
-            Experience seamless and easy bus ticket booking. Search routes,
-            compare prices, check seat availability, and book your tickets in
-            seconds. Safe, fast, and reliable travel – one click away!
-          </p>
-        </Col>
-      </Row>
-    </Container>
+    <div className="homepage-wrapper">
+      <div className="overlay">
+        <div className="content-container">
+          <div className="left-content">
+            <ImageCarousel />
+          </div>
+          <div className="right-content">
+            <h2 className="text-white mb-3">Welcome to Aman Booking System</h2>
+            <p className="text-white lead">
+              "Aman Booking System is your reliable partner for hassle-free bus travel. Discover routes, compare prices, and book your tickets in seconds – all from one platform. Whether you're commuting daily or planning a long trip, we make your journey simple, secure, and seamless."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

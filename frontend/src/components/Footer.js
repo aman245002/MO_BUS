@@ -1,16 +1,17 @@
 // src/components/Footer.js
 import { Container, Row, Col } from "react-bootstrap";
+import "./Footer.css"; // Make sure to import the CSS file
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-light py-3 mt-auto">
+    <footer className="custom-footer mt-auto">
       <Container>
-        <Row className="justify-content-between">
-          <Col md="auto">
-            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="text-light me-3">LinkedIn</a>
-            <a href="https://github.com/" target="_blank" rel="noreferrer" className="text-light me-3">GitHub</a>
-            <a href="https://instagram.com/" target="_blank" rel="noreferrer" className="text-light me-3">Instagram</a>
-            <a href="/help" className="text-light">Help</a>
+        <Row className="justify-content-between align-items-center">
+          <Col md="auto" className="footer-links">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+            <a href="/help">Help</a>
           </Col>
           <Col md="auto" className="text-end">
             © {new Date().getFullYear()} Aman Booking System

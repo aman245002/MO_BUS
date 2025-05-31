@@ -1,47 +1,56 @@
-import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import "./UserNavbar.css";
 
 function UserNavbar() {
   const navigate = useNavigate();
-  const userRole = localStorage.getItem('userRole'); // 'user' or 'admin'
+  const userRole = localStorage.getItem("userRole");
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userId');
-    navigate('/login');
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userId");
+    navigate("/login");
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
+    <Navbar bg="white" expand="lg" className="custom-navbar shadow-sm px-3">
+      <Container fluid>
+        {/* Branding Title Only */}
         <Navbar.Brand
-          onClick={() => navigate('/dashboard')}
-          style={{ cursor: 'pointer' }}
+          onClick={() => navigate("/dashboard")}
+          className="brand-logo"
         >
-          Aman Booking System
+          <span className="brand-text">Aman Booking System</span>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            {/* Visible to all */}
-            <Nav.Link onClick={() => navigate('/total-busstops')}>Total Bus Stops</Nav.Link>
-            <Nav.Link onClick={() => navigate('/total-buses')}>Total Buses</Nav.Link>
-            <Nav.Link onClick={() => navigate('/profile')}>My Profile</Nav.Link>
 
-            {/* Admin-only */}
-            {userRole === 'admin' && (
-              <>
-                <Nav.Link onClick={() => navigate('/manage-busstops')}>Manage Bus Stops</Nav.Link>
-                <Nav.Link onClick={() => navigate('/manage-buses')}>Manage Buses</Nav.Link>
-                <Nav.Link onClick={() => navigate('/admin/manage-profiles')}>Manage Profiles</Nav.Link>
-              </>
-            )}
+        {/* Right - Links */}
+        <Nav className="ms-auto nav-links">
+          <Nav.Link onClick={() => navigate("/total-busstops")}>
+            Bus Stops
+          </Nav.Link>
+          <Nav.Link onClick={() => navigate("/total-buses")}>Buses</Nav.Link>
+          <Nav.Link onClick={() => navigate("/profile")}>My Profile</Nav.Link>
 
-            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+          {userRole === "admin" && (
+            <>
+              <Nav.Link onClick={() => navigate("/manage-busstops")}>
+                Manage Stops
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/manage-buses")}>
+                Manage Buses
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/admin/manage-profiles")}>
+                Profiles
+              </Nav.Link>
+            </>
+          )}
+
+          <Nav.Link onClick={handleLogout} className="nav-link logout-button">
+            Logout
+          </Nav.Link>
+        </Nav>
       </Container>
     </Navbar>
   );

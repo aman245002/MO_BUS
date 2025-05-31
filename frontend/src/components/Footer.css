@@ -1,0 +1,21 @@
+/* Footer.css */
+
+.custom-footer {
+  background-color: #000000; /* Black background */
+  color: #ffffff; /* White text */
+  padding: 1rem 0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+}
+
+/* Footer Links */
+.footer-links a {
+  color: #ffffff;
+  margin-right: 1rem;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-links a:hover {
+  color: #60a5fa; /* Light blue on hover */
+}

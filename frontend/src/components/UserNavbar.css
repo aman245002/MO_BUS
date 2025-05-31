@@ -1,0 +1,66 @@
+/* UserNavbar.css */
+
+/* Base Navbar Styling */
+.navbar {
+  background-color: #000000 !important; /* black background */
+  font-family: 'Segoe UI', sans-serif;
+  padding: 0.6rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Brand/Logo */
+.navbar-brand {
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-brand:hover {
+  color: #60a5fa !important; /* Tailwind's blue-400 */
+}
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+  color: #ffffff !important; /* white text */
+  font-weight: 500;
+  margin-left: 1rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #60a5fa !important; /* hover blue */
+}
+
+/* Active-style Tabs (like redBus) */
+.navbar-nav .nav-link.active {
+  color: #60a5fa !important;
+  border-bottom: 2px solid #60a5fa;
+  padding-bottom: 0.2rem;
+}
+
+/* Responsive Alignment */
+@media (max-width: 768px) {
+  .navbar-nav .nav-link {
+    margin-left: 0.5rem;
+  }
+}
+
+/* Logout Button */
+.logout-button {
+  background-color: #d32f2f;
+  color: #fff !important;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+  margin-left: 1rem;
+}
+
+.logout-button:hover {
+  background-color: #b71c1c;
+  color: #fff !important;
+}
