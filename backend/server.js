@@ -1,19 +1,26 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors"); // ✅ Add this line
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
-const busRoutes = require("./routes/busRoutes"); // Import Bus Routes
 const busStopRoutes = require("./routes/busStopRoutes");
+const busRoutes = require("./routes/busRoutes");
+
 
 dotenv.config();
 connectDB();
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON
+
+// ✅ Enable CORS for all origins (for dev)
+app.use(cors());
+
+// Middleware to parse JSON
+app.use(express.json());
 
 // Mount Routes
 app.use("/api/users", userRoutes);
-app.use("/api/buses", busRoutes); // ✅ Register the bus routes
+app.use("/api/buses", busRoutes);
 app.use("/api/busstops", busStopRoutes);
 
 app.get("/", (req, res) => {
