@@ -14,7 +14,7 @@ const app = express();
 
 // ✅ Enable CORS for all origins (for dev)
 app.use(cors({
-  origin: 'https://frontend-bus.netlify.app/',
+  origin: 'https://frontend-bus.netlify.app',
   credentials: true,
 }));
 
