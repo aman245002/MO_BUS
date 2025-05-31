@@ -26,12 +26,15 @@ function UserDashboard() {
         return;
       }
 
-      const res = await axios.get("http://localhost:5000/api/buses/search", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { stop: busStopName.trim() }, // ✅ Corrected this line
-      });
+      const res = await axios.get(
+        "https://mo-bus-iozk.onrender.com/api/buses/search",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { stop: busStopName.trim() }, // ✅ Corrected this line
+        }
+      );
 
       setResults(res.data);
     } catch (err) {

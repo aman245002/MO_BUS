@@ -1,7 +1,7 @@
 import axios from "axios";
-
+// https://mo-bus-iozk.onrender.com
 const instance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://mo-bus-iozk.onrender.com",
 });
 
 // Automatically attach token for every request

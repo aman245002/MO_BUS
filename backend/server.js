@@ -13,7 +13,11 @@ connectDB();
 const app = express();
 
 // ✅ Enable CORS for all origins (for dev)
-app.use(cors());
+app.use(cors({
+  origin: 'https://frontend-bus.netlify.app/',
+  credentials: true,
+}));
+
 
 
 // Middleware to parse JSON
