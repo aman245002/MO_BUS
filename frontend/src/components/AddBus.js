@@ -170,6 +170,7 @@ const AddBus = () => {
                   multiple
                   value={formData.busStops}
                   onChange={handleChange}
+                  style={{ height: "250px" }}
                 >
                   {busStopsList
                     .filter(

@@ -194,6 +194,7 @@ const EditBus = () => {
               name="busStops"
               value={formData.busStops}
               onChange={handleChange}
+              style={{ height: "300px" }}
               required
             >
               {busStopsList.map((stop) => (

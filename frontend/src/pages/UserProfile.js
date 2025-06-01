@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Spinner } from 'react-bootstrap';
+import { Container, Card, Spinner, Row, Col } from 'react-bootstrap';
 import axios from '../api/axios';
 import UserNavbar from '../components/UserNavbar';
 import Footer from '../components/Footer';
+import { FaUser, FaEnvelope, FaUserShield } from 'react-icons/fa';
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -11,11 +12,11 @@ function UserProfile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token'); // ✅ Get token
+        const token = localStorage.getItem('token');
         const response = await axios.get('/api/users/profile', {
           headers: {
-            Authorization: `Bearer ${token}` // ✅ Attach token
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
         setUser(response.data);
       } catch (error) {
@@ -31,24 +32,49 @@ function UserProfile() {
   return (
     <>
       <UserNavbar />
-      <Container className="my-5">
-        <h3 className="text-center mb-4">User Profile</h3>
-        {loading ? (
-          <div className="text-center">
-            <Spinner animation="border" />
-          </div>
-        ) : user ? (
-          <Card className="mx-auto" style={{ maxWidth: '400px' }}>
-            <Card.Body>
-              <Card.Title>{user.name}</Card.Title>
-              <Card.Text>Email: {user.email}</Card.Text>
-              <Card.Text>Role: {user.role}</Card.Text>
-            </Card.Body>
-          </Card>
-        ) : (
-          <p className="text-center text-danger">Failed to load profile.</p>
-        )}
-      </Container>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '75vh', backgroundColor: '#fff' }}
+      >
+        <Container>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" />
+            </div>
+          ) : user ? (
+            <Card className="shadow-lg border-0 p-4 mx-auto" style={{ maxWidth: '500px' }}>
+              <Card.Body>
+                <div className="text-center mb-4">
+                  <FaUser size={60} className="text-dark mb-2" />
+                  <h4>{user.name}</h4>
+                  <p className="text-muted">
+                    {user.role === 'admin' ? 'Administrator' : 'User'}
+                  </p>
+                </div>
+                <hr />
+                <Row className="mb-3">
+                  <Col xs={1}>
+                    <FaEnvelope className="text-dark" />
+                  </Col>
+                  <Col>
+                    <strong>Email:</strong> {user.email}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={1}>
+                    <FaUserShield className="text-dark" />
+                  </Col>
+                  <Col>
+                    <strong>Role:</strong> {user.role}
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          ) : (
+            <p className="text-center text-danger">Failed to load profile.</p>
+          )}
+        </Container>
+      </div>
       <Footer />
     </>
   );
